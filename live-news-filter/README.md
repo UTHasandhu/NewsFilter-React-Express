@@ -1,70 +1,114 @@
-# Getting Started with Create React App
+# Project Documentation – Live Feed Filter
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Project Overview
 
-## Available Scripts
+**Live Feed Filter** is a full-stack web application designed to demonstrate foundational web development skills using React on the frontend and Express.js with Node.js on the backend. The application allows users to fetch and filter a list of "posts" served from a local backend and toggle between light and dark themes for better accessibility. The frontend also tracks the previous search query and updates dynamically based on user input.
 
-In the project directory, you can run:
+This app is intentionally lightweight, avoiding databases and authentication to stay focused on **core concepts**: React hooks, state management, RESTful APIs, component structure, and basic server-side architecture.
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Project Purpose
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+This project was built to:
 
-### `npm test`
+- Practice React fundamentals, including `useState`, `useEffect`, `useRef`, `useContext`, and `useReducer`
+- Understand client-server interaction through a local Express backend
+- Prepare for interviews by reinforcing frontend + backend integration patterns
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Technologies Used
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| Layer      | Tools / Libraries                  |
+|------------|------------------------------------|
+| Frontend   | React, JSX, Axios, React Context   |
+| Backend    | Node.js, Express.js                |
+| Dev Tools  | npm, create-react-app, Postman     |
+| Mobile     | React Native (planned extension)   |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## File Descriptions
 
-### `npm run eject`
+### `/backend/index.js`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+This is the main entry point for the backend. It uses Express to define a simple HTTP server with one GET endpoint `/posts`. It serves data from a JSON file using Node's built-in `fs` module. The `cors` middleware is used to allow cross-origin access from the frontend.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### `/backend/data/posts.json`
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+This is a static dataset in JSON format. Each object represents a post with an `id`, `title`, and `body`. It acts as a substitute for a real database and allows quick data retrieval for frontend testing.
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### `/frontend/src/index.js`
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+This file renders the React app to the browser using `ReactDOM.createRoot`. It mounts the root component (`App.js`) inside the DOM element with the ID `root`. The app is wrapped in a `ThemeProvider` for global theme state management.
 
-### Code Splitting
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### `/frontend/src/App.js`
 
-### Analyzing the Bundle Size
+The main logic of the application lives here. This component:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- Fetches posts from the backend using Axios and stores them in state
+- Tracks the user’s search input and filters the displayed posts accordingly
+- Uses a custom `usePrevious` hook to show the previous search term
+- Applies light/dark theme using context
+- Renders the layout, including the `ThemeToggle`, `SearchBar`, and `PostList` components
 
-### Making a Progressive Web App
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### `/frontend/src/components/SearchBar.jsx`
 
-### Advanced Configuration
+A controlled input field that allows the user to search posts by title. It receives a `value` and `onChange` prop to control the search term from the parent (`App.js`). It also uses `useRef` to focus the input when the user clicks "Clear."
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+### `/frontend/src/components/PostList.jsx`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+A presentational component that accepts an array of filtered posts and renders them as a list. If no posts match the search query, it displays a message. Each post displays a title and a body.
 
-### `npm run build` fails to minify
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### `/frontend/src/components/ThemeToggle.jsx`
+
+A simple button that toggles between light and dark themes using a `dispatch` function from React’s `useReducer`. The current theme is accessed via context (`useTheme()`), and the button label updates based on the active theme.
+
+---
+
+### `/frontend/src/context/ThemeContext.js`
+
+Provides global theme state using the Context API + `useReducer`. It defines a reducer with a single action type: `TOGGLE_THEME`. This lets any child component access or update the current theme without prop drilling.
+
+---
+
+### `/frontend/src/hooks/usePrevious.js`
+
+A custom React Hook that tracks the previous value of a given state variable. It uses `useRef` to persist data across renders and `useEffect` to update the ref whenever the input value changes.
+
+---
+
+## Things I learned
+
+- Understand how to structure a React project with reusable components and separation of concerns
+- Implement and consume a RESTful API using Express and Axios
+- Learn how React hooks (`useState`, `useEffect`, `useRef`, `useContext`, `useReducer`) work in practice
+- Track previous state using custom hooks
+- Implement global state management without Redux
+- Learn to serve static data without needing a full database
+- Prepare to extend the same backend for use with React Native or other platforms
+
+---
+
+## Next Steps
+
+- Stylize the UI
+- Make a post and put endpoint to add/edit posts to make this a full crud app
+- Create a mobile version using React Native that consumes the same API
+- Deploy the frontend to github pages and the backend to a cloud service like Render
+- Add unit testing
+
+---
