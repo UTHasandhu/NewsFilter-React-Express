@@ -22,9 +22,9 @@ function App() {
       .catch(err => console.error(err));
   }, []);
 
-  // Step 3: Filter posts
+  // Filter posts
   const filtered = posts.filter(p =>
-    p.title.toLowerCase().trim(' ').includes(searchTerm.toLowerCase().trim(' '))
+    p.title.toLowerCase().trim().includes(searchTerm.toLowerCase().trim())
   );
 
   // Step 4: Theme context
@@ -33,8 +33,8 @@ function App() {
     <div className={`.app-container.${theme}`}>
       <ThemeToggle />
       <SearchBar value={searchTerm} onChange={setSearchTerm} />
-      <PostList posts={filtered} />
       {previousSearch && <div>Previous search term: {previousSearch}</div>} 
+      <PostList posts={filtered} />
     </div>
   );
 }
