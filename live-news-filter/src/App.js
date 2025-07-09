@@ -1,53 +1,49 @@
-
-// 7. Use useEffect to fetch posts from the backend on mount
-
-// 8. Filter posts based on search term (convert both to lowercase)
-
-// 9. Get previousSearch using usePrevious(searchTerm)
-
-// 10. Render the ThemeToggle, SearchBar, PostList
-//     - Also show the previous search term
-
-// 11. Wrap this App component in <ThemeProvider> before exporting
-import axios from 'axios';
+// src/App.js
 import React, { useState, useEffect } from 'react';
-import { ThemeProvider, useTheme } from './context/ThemeContext';
+import axios from 'axios';
 import SearchBar from './components/SearchBar';
 import PostList from './components/PostList';
 import ThemeToggle from './components/ThemeToggle';
-import themeContext from './context/ThemeContext';
-
-import logo from './logo.svg';
+import usePrevious from './hooks/usePrevious';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 import './App.css';
 
-//Shows theme toggle, search bar, then post list.
 function App() {
-  // Need to create state for posts and searched word
+  // Step 1: Set up state
   const [posts, setPosts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
-  //This hook stores previous search term any time searchTerm updates.
   const previousSearch = usePrevious(searchTerm);
-  const theme = useTheme();
 
-  //Fetch posts from backend on page render
+  // Step 2: Fetch posts on mount
   useEffect(() => {
-    axios.get('http://localhost:3001/posts').then((res) =>
-    {
-      setPosts(res.data)
-    }).catch(e => console.error(e))
-   }, [])
+    axios.get('http://localhost:3001/posts')
+      .then(response => setPosts(response.data))
+      .catch(err => console.error(err));
+  }, []);
 
+  // Step 3: Filter posts
+  const filtered = posts.filter(p =>
+    p.title.toLowerCase().trim(' ').includes(searchTerm.toLowerCase().trim(' '))
+  );
 
-  
+  // Step 4: Theme context
+  const { theme } = useTheme();
   return (
-    <div className={`app-container ${theme}`}>
+    <div className={`.app-container.${theme}`}>
       <ThemeToggle />
       <SearchBar value={searchTerm} onChange={setSearchTerm} />
-      <PostList posts={posts} />
+      <PostList posts={filtered} />
       {previousSearch && <div>Previous search term: {previousSearch}</div>} 
     </div>
   );
 }
 
-export default App;
+// Wrap in ThemeProvider
+export default function WrappedApp() {
+  return (
+    <ThemeProvider>
+      <App />
+    </ThemeProvider>
+  );
+}

@@ -1,6 +1,5 @@
-import React, { createContext } from 'react';
-import { useTheme } from '../context/ThemeContext';
-
+// Global theme state using React Context and Reducer
+import React, { createContext, useContext, useReducer } from 'react';
 const ThemeContext = createContext(); // create context to be modified
 
 const initialState = 'light';
