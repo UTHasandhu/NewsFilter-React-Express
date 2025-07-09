@@ -1,0 +1,9 @@
+[
+  { "id": 1, "title": "AI is transforming logistics", "body": "New AI models help reduce fuel costs." },
+  { "id": 2, "title": "React 19 Beta Released", "body": "Concurrent mode improvements announced." },
+  { "id": 3, "title": "Node.js 20 Performance Boost", "body": "Faster server-side rendering possible." },
+  { "id": 4, "title": "Express.js 5.0 Released", "body": "New features for middleware and routing." },
+  { "id": 5, "title": "CORS in Express", "body": "How to handle CORS in your Express applications." },
+  { "id": 6, "title": "Testing in Node.js", "body": "Best practices for testing your Node.js applications." },
+  { "id": 7, "title": "Deploying Node.js Apps", "body": "Strategies for deploying your Node.js applications." }
+]
