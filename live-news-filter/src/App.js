@@ -1,12 +1,3 @@
-// 1. Import useState, useEffect from React
-// 2. Import axios to fetch data from backend
-// 3. Import custom components: SearchBar, PostList, ThemeToggle
-// 4. Import custom hooks: usePrevious
-// 5. Import ThemeContext using useTheme()
-
-// 6. Create state for:
-//    - posts: all posts from backend
-//    - searchTerm: what the user is typing
 
 // 7. Use useEffect to fetch posts from the backend on mount
 
@@ -38,6 +29,15 @@ function App() {
   //This hook stores previous search term any time searchTerm updates.
   const previousSearch = usePrevious(searchTerm);
   const theme = useTheme();
+
+  //Fetch posts from backend on page render
+  useEffect(() => {
+    axios.get('http://localhost:3001/posts').then((res) =>
+    {
+      setPosts(res.data)
+    }).catch(e => console.error(e))
+   }, [])
+
 
   
   return (
